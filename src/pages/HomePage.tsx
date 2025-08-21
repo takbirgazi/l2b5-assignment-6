@@ -1,81 +1,103 @@
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import { Link } from "react-router";
+import { Wallet, Send, CreditCard, Shield, Users, Smartphone } from "lucide-react";
+import { NavLink } from "react-router";
 
 export default function HomePage() {
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        <div className="w-full">
             {/* Hero Section */}
-            <section className="flex flex-col-reverse md:flex-row items-center justify-between flex-grow px-6 md:px-16 py-12">
-                {/* Left Content */}
-                <motion.div
-                    initial={{ opacity: 0, x: -40 }}
-                    animate={{ opacity: 1, x: 0 }}
+            <section className="relative flex flex-col items-center justify-center text-center px-6 py-20 bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+                <motion.h1
+                    initial={{ opacity: 0, y: -30 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
-                    className="max-w-lg text-center md:text-left"
+                    className="text-5xl font-bold mb-4"
                 >
-                    <h2 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
-                        The Future of <span className="text-blue-600">Digital Wallets</span>
-                    </h2>
-                    <p className="mt-4 text-gray-600 text-lg">
-                        With <strong>No-Cash</strong>, manage your money anytime, anywhere.
-                        Fast, secure, and role-based for Users, Agents, and Admins.
-                    </p>
-                    <div className="mt-6 flex justify-center md:justify-start gap-4">
-                        <Link
-                            to="/signup"
-                            className="px-6 py-3 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 transition"
-                        >
-                            Get Started
-                        </Link>
-                        <Link
-                            to="/about"
-                            className="px-6 py-3 bg-gray-200 text-gray-800 rounded-xl shadow hover:bg-gray-300 transition"
-                        >
-                            Learn More
-                        </Link>
-                    </div>
-                </motion.div>
-
-                {/* Right Illustration */}
-                <motion.div
-                    initial={{ opacity: 0, x: 40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    className="mb-10 md:mb-0"
-                >
-                    <img
-                        src="https://illustrations.popsy.co/blue/digital-wallet.svg"
-                        alt="Digital Wallet"
-                        className="w-full max-w-md"
-                    />
-                </motion.div>
-
-                <Button>Hello</Button>
+                    Welcome to No-Cash
+                </motion.h1>
+                <p className="text-lg max-w-2xl mb-6">
+                    A secure, fast, and reliable digital wallet service like bKash – send, receive, cash in, and cash out anytime, anywhere.
+                </p>
+                <NavLink to="/login">
+                    <Button className="cursor-pointer" size="lg" variant="secondary">Get Started</Button>
+                </NavLink>
             </section>
 
-            {/* Features Section */}
-            <section className="bg-white py-16 px-6 md:px-16">
-                <h3 className="text-3xl font-bold text-center text-gray-800 mb-12">
-                    Why Choose <span className="text-blue-600">No-Cash?</span>
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                    <motion.div whileHover={{ scale: 1.05 }} className="bg-gray-50 p-6 rounded-2xl shadow text-center">
-                        <h4 className="text-xl font-semibold text-blue-600">⚡ Fast</h4>
-                        <p className="text-gray-600 mt-2">Instant money transfers with just a few clicks.</p>
-                    </motion.div>
-
-                    <motion.div whileHover={{ scale: 1.05 }} className="bg-gray-50 p-6 rounded-2xl shadow text-center">
-                        <h4 className="text-xl font-semibold text-green-600">🔒 Secure</h4>
-                        <p className="text-gray-600 mt-2">Advanced encryption ensures your transactions are safe.</p>
-                    </motion.div>
-
-                    <motion.div whileHover={{ scale: 1.05 }} className="bg-gray-50 p-6 rounded-2xl shadow text-center">
-                        <h4 className="text-xl font-semibold text-red-600">🌍 Reliable</h4>
-                        <p className="text-gray-600 mt-2">Trusted by users, agents, and admins for smooth operations.</p>
-                    </motion.div>
+            {/* Features */}
+            <section className="py-16 px-6 max-w-6xl mx-auto">
+                <h2 className="text-3xl font-bold text-center mb-12">Why Choose No-Cash?</h2>
+                <div className="grid gap-6 md:grid-cols-3">
+                    <Card className="shadow-lg hover:shadow-2xl transition">
+                        <CardContent className="p-6 text-center">
+                            <Wallet className="w-12 h-12 mx-auto text-indigo-600 mb-4" />
+                            <h3 className="text-xl font-semibold mb-2">Easy Cash In/Out</h3>
+                            <p>Deposit and withdraw money instantly through agents or linked bank accounts.</p>
+                        </CardContent>
+                    </Card>
+                    <Card className="shadow-lg hover:shadow-2xl transition">
+                        <CardContent className="p-6 text-center">
+                            <Send className="w-12 h-12 mx-auto text-indigo-600 mb-4" />
+                            <h3 className="text-xl font-semibold mb-2">Send & Receive</h3>
+                            <p>Transfer money securely to anyone with just a phone number.</p>
+                        </CardContent>
+                    </Card>
+                    <Card className="shadow-lg hover:shadow-2xl transition">
+                        <CardContent className="p-6 text-center">
+                            <Shield className="w-12 h-12 mx-auto text-indigo-600 mb-4" />
+                            <h3 className="text-xl font-semibold mb-2">Secure Transactions</h3>
+                            <p>Bank-level encryption and fraud detection for safe digital payments.</p>
+                        </CardContent>
+                    </Card>
                 </div>
             </section>
+
+            {/* How it works */}
+            <section className="py-16 bg-gray-50 dark:bg-gray-900 px-6">
+                <h2 className="text-3xl font-bold text-center mb-12">How No-Cash Works</h2>
+                <div className="grid gap-8 md:grid-cols-3 max-w-6xl mx-auto">
+                    <div className="text-center">
+                        <Smartphone className="w-12 h-12 mx-auto text-purple-600 mb-4" />
+                        <h3 className="font-semibold text-lg">1. Register</h3>
+                        <p>Create your No-Cash account in just a few minutes.</p>
+                    </div>
+                    <div className="text-center">
+                        <CreditCard className="w-12 h-12 mx-auto text-purple-600 mb-4" />
+                        <h3 className="font-semibold text-lg">2. Add Funds</h3>
+                        <p>Cash in through agents, banks, or mobile recharge.</p>
+                    </div>
+                    <div className="text-center">
+                        <Users className="w-12 h-12 mx-auto text-purple-600 mb-4" />
+                        <h3 className="font-semibold text-lg">3. Send & Pay</h3>
+                        <p>Transfer money, pay bills, and shop with No-Cash.</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* Testimonials */}
+            <section className="py-16 px-6 max-w-6xl mx-auto">
+                <h2 className="text-3xl font-bold text-center mb-12">What Our Users Say</h2>
+                <div className="grid md:grid-cols-2 gap-8">
+                    <Card className="p-6 shadow-md hover:shadow-xl transition">
+                        <p className="mb-4 italic">“No-Cash has made my life easier. Sending money to family takes just seconds!”</p>
+                        <span className="font-semibold">– Rahim, Dhaka</span>
+                    </Card>
+                    <Card className="p-6 shadow-md hover:shadow-xl transition">
+                        <p className="mb-4 italic">“The security features give me peace of mind. Highly recommended!”</p>
+                        <span className="font-semibold">– Ayesha, Chattogram</span>
+                    </Card>
+                </div>
+            </section>
+
+            {/* CTA */}
+            <section className="py-16 text-center bg-indigo-600 text-white">
+                <h2 className="text-3xl font-bold mb-4">Ready to Go Cashless?</h2>
+                <p className="mb-6">Join thousands of users who trust No-Cash for secure digital payments.</p>
+                <NavLink to="/login">
+                    <Button className="cursor-pointer" size="lg" variant="secondary">Get Started</Button>
+                </NavLink>
+            </section>
         </div>
-    );
+    )
 }

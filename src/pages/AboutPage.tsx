@@ -1,75 +1,113 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { NavLink } from "react-router";
 
 export default function AboutPage() {
     return (
-        <div className="min-h-screen bg-gray-50 px-6 py-12 flex flex-col items-center">
-            <div className="max-w-5xl w-full text-center">
-                {/* Title */}
-                <motion.h1
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="text-4xl md:text-5xl font-bold text-blue-600 mb-6"
-                >
-                    About <span className="text-gray-800">No-Cash</span>
-                </motion.h1>
+        <div className="min-h-screen bg-background text-foreground px-6 py-12 md:px-20">
+            {/* Header */}
+            <motion.h1
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-4xl md:text-5xl font-bold text-center mb-8"
+            >
+                About <span className="text-primary">No-Cash</span>
+            </motion.h1>
 
-                {/* Description */}
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                    className="text-gray-600 text-lg md:text-xl leading-relaxed mb-12"
-                >
-                    <strong>No-Cash</strong> is a modern digital wallet solution that makes
-                    money transfers fast, secure, and reliable. With role-based access for{" "}
-                    <span className="font-semibold text-gray-800">Users</span>,{" "}
-                    <span className="font-semibold text-gray-800">Agents</span>, and{" "}
-                    <span className="font-semibold text-gray-800">Admins</span>, everyone
-                    can manage money with ease.
-                </motion.p>
-
-                {/* Features Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {/* User */}
-                    <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        className="bg-white shadow-md rounded-2xl p-6 text-center cursor-pointer"
-                    >
-                        <h2 className="text-2xl font-semibold text-blue-600 mb-3">👤 User</h2>
-                        <p className="text-gray-600">
-                            Send, receive, cash in, and cash out seamlessly. Track all your
-                            transactions in one place.
+            {/* Mission & Vision */}
+            <div className="grid gap-8 md:grid-cols-2 mb-12">
+                <Card className="shadow-xl rounded-2xl">
+                    <CardContent className="p-6">
+                        <h2 className="text-2xl font-semibold mb-3">Our Mission</h2>
+                        <p className="text-muted-foreground">
+                            At <b>No-Cash</b>, our mission is to empower people with a fast, secure, and
+                            user-friendly digital wallet system—so that financial transactions are
+                            as easy as sending a message. We aim to make digital payments accessible
+                            to everyone, everywhere.
                         </p>
-                    </motion.div>
+                    </CardContent>
+                </Card>
 
-                    {/* Agent */}
-                    <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        className="bg-white shadow-md rounded-2xl p-6 text-center cursor-pointer"
-                    >
-                        <h2 className="text-2xl font-semibold text-green-600 mb-3">
-                            🧑‍💼 Agent
-                        </h2>
-                        <p className="text-gray-600">
-                            Handle customer requests for cash in and cash out with secure
-                            transaction processing.
+                <Card className="shadow-xl rounded-2xl">
+                    <CardContent className="p-6">
+                        <h2 className="text-2xl font-semibold mb-3">Our Vision</h2>
+                        <p className="text-muted-foreground">
+                            We envision a cashless society where individuals and businesses
+                            can transfer, store, and manage money securely with just a few taps.
+                            Our goal is to be the most trusted and widely used digital wallet
+                            in Bangladesh and beyond.
                         </p>
-                    </motion.div>
+                    </CardContent>
+                </Card>
+            </div>
 
-                    {/* Admin */}
-                    <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        className="bg-white shadow-md rounded-2xl p-6 text-center cursor-pointer"
-                    >
-                        <h2 className="text-2xl font-semibold text-red-600 mb-3">👨‍💻 Admin</h2>
-                        <p className="text-gray-600">
-                            Manage users, agents, and monitor all transactions with full
-                            control of the system.
-                        </p>
-                    </motion.div>
+            {/* Features */}
+            <div className="mb-12">
+                <h2 className="text-3xl font-bold text-center mb-6">Why Choose No-Cash?</h2>
+                <div className="grid md:grid-cols-3 gap-6">
+                    {[
+                        {
+                            title: "Secure Transactions",
+                            desc: "We use bank-level encryption and multi-layer authentication to protect every transaction."
+                        },
+                        {
+                            title: "User-Friendly",
+                            desc: "Simple, clean, and easy-to-use interface designed for everyone—from students to professionals."
+                        },
+                        {
+                            title: "24/7 Availability",
+                            desc: "Make payments, cash in/out, and send/receive money anytime, anywhere—without restrictions."
+                        },
+                        {
+                            title: "Agent & Merchant Network",
+                            desc: "A wide network of agents and merchants makes it easier to cash out and use services in real life."
+                        },
+                        {
+                            title: "Inclusive Services",
+                            desc: "Supporting financial inclusion for unbanked and rural communities by providing easy digital access."
+                        },
+                        {
+                            title: "Affordable Fees",
+                            desc: "We ensure minimum service charges so users can enjoy affordable financial transactions."
+                        }
+                    ].map((item, index) => (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                        >
+                            <Card className="shadow-lg hover:shadow-2xl transition rounded-2xl">
+                                <CardContent className="p-6 text-center">
+                                    <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                                    <p className="text-muted-foreground">{item.desc}</p>
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
+
+            {/* Call to Action */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.7 }}
+                className="text-center mt-12"
+            >
+                <h2 className="text-2xl font-bold mb-4">Join the No-Cash Revolution 🚀</h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
+                    Experience the future of money transfers with No-Cash.
+                    Whether you are a student, entrepreneur, or business owner,
+                    our platform is built to make your life easier.
+                </p>
+                <NavLink to="/login">
+                    <Button className="cursor-pointer" size="lg" variant="secondary">Get Started</Button>
+                </NavLink>
+            </motion.div>
         </div>
-    );
-};
+    )
+}
