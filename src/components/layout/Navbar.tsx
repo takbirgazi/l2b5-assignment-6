@@ -1,89 +1,101 @@
-// src/components/Navbar.jsx
-import { useState } from "react";
-import { Link } from "react-router";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button"
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from "@/components/ui/navigation-menu"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import logo from "@/assets/images/logo.png";
+import logo2 from "@/assets/images/logo_2.png";
+import { NavLink, useLocation } from "react-router";
 import { ModeToggle } from "./ModeToggler";
+import { useTheme } from "@/hooks/useTheme";
+import Bar from "@/assets/icon/Bar";
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+// Navigation links array to be used in both desktop and mobile menus
+const navigationLinks = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/features", label: "Features" },
+  { href: "/contact", label: "Contact" },
+  { href: "/faq", label: "FAQ" },
+];
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-
-  const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
-    { name: "Features", path: "/features" },
-    { name: "Contact", path: "/contact" },
-  ];
+export default function Component() {
+  const { theme } = useTheme();
+  const currentPath = useLocation();
+  const currentPage = currentPath.pathname;
 
   return (
-    <nav className="w-full bg-white shadow fixed top-0 left-0 z-50 ">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between py-4">
-        {/* Logo */}
-        <Link to="/" className="text-2xl font-bold text-blue-600">
-          No-Cash
-        </Link>
-
-        {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-8">
-          <ModeToggle />
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              to={link.path}
-              className="text-gray-700 hover:text-blue-600 transition-colors"
-            >
-              {link.name}
-            </Link>
-          ))}
-          <Link
-            to="/login"
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
-          >
-            Login
-          </Link>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          onClick={toggleMenu}
-          className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100"
-        >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
-      </div>
-
-      {/* Mobile Menu Dropdown */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-white shadow-inner px-6 pb-4 space-y-4 pt-4"
-          >
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                onClick={() => setIsOpen(false)}
-                className="block text-gray-700 hover:text-blue-600 transition-colors"
+    <header className="border-b px-4 md:px-6">
+      <div className="flex h-16 items-center justify-between gap-4 container mx-auto">
+        {/* Left side */}
+        <div className="flex items-center gap-2">
+          {/* Mobile menu trigger */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                className="group size-8 md:hidden"
+                variant="ghost"
+                size="icon"
               >
-                {link.name}
-              </Link>
-            ))}
-            <Link
-              to="/login"
-              onClick={() => setIsOpen(false)}
-              className="block px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
-            >
-              Login
-            </Link>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
-  );
+                <Bar />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="start" className="w-36 p-1 md:hidden">
+              <NavigationMenu className="max-w-none *:w-full">
+                <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
+                  {navigationLinks.map((link, index) => (
+                    <NavigationMenuItem key={index} className="w-full">
+                      <NavigationMenuLink
+                        href={link.href}
+                        className="py-1.5"
+                        active={link.href == currentPage}
+                      >
+                        {link.label}
+                      </NavigationMenuLink>
+                    </NavigationMenuItem>
+                  ))}
+                </NavigationMenuList>
+              </NavigationMenu>
+            </PopoverContent>
+          </Popover>
+          {/* Main nav */}
+          <div className="flex items-center gap-6">
+            <NavLink className="" to="/">
+              <img width={100} height={35} src={theme == "dark" ? logo2 : logo} />
+            </NavLink>
+            {/* Navigation menu */}
+            <NavigationMenu className="max-md:hidden">
+              <NavigationMenuList className="gap-2">
+                {navigationLinks.map((link, index) => (
+                  <NavigationMenuItem key={index}>
+                    <NavigationMenuLink
+                      active={link.href == currentPage}
+                      href={link.href}
+                      className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                    >
+                      {link.label}
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
+        </div>
+        {/* Right side */}
+        <div className="flex items-center gap-2">
+          <ModeToggle />
+          <Button asChild variant="ghost" size="sm" className="text-sm">
+            <NavLink to="/login">Log In</NavLink>
+          </Button>
+        </div>
+      </div>
+    </header>
+  )
 }

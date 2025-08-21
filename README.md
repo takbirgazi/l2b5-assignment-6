@@ -68,7 +68,7 @@ No-Cash-Frontend/
 4. Create a `.env` file in the root folder and add your backend API URL:
 
    ```env
-   VITE_API_URL=http://localhost:5000
+   VITE_BASE_API=http://localhost:5000
    ```
 5. Run the development server:
 
