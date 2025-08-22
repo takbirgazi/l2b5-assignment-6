@@ -1,12 +1,22 @@
 import logo from "@/assets/images/logo.png";
 import logo2 from "@/assets/images/logo_2.png";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useTheme } from "@/hooks/useTheme";
 import { SignUpForm } from "@/components/modules/authentication/SignUpForm";
 import signUpImage from "@/assets/images/signup.jpg";
+import { useGetDataQuery } from "@/redux/features/auth/auth.api";
+import { useEffect } from "react";
 
 export function SignUpPage() {
     const { theme } = useTheme();
+    const { data } = useGetDataQuery(undefined);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (data?.data?.email) {
+            navigate("/");
+        }
+    }, [data, navigate]);
 
     return (
         <div className="grid min-h-svh lg:grid-cols-2">

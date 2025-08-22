@@ -1,21 +1,24 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-} from "@/components/ui/navigation-menu"
+} from "@/components/ui/navigation-menu";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 import logo from "@/assets/images/logo.png";
 import logo2 from "@/assets/images/logo_2.png";
-import { NavLink, useLocation } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 import { ModeToggle } from "./ModeToggler";
 import { useTheme } from "@/hooks/useTheme";
 import Bar from "@/assets/icon/Bar";
+import { useGetDataQuery, useLogOutMutation } from "@/redux/features/auth/auth.api";
+import { useAppDispatch } from "@/redux/hooks";
+import { baseApi } from "@/redux/baseApi";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
@@ -28,8 +31,18 @@ const navigationLinks = [
 
 export default function Component() {
   const { theme } = useTheme();
+  const { data, isLoading } = useGetDataQuery(undefined);
   const currentPath = useLocation();
   const currentPage = currentPath.pathname;
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [logOut] = useLogOutMutation();
+
+  const handleLOgOut = async () => {
+    await logOut(undefined);
+    dispatch(baseApi.util.resetApiState());
+    navigate("/login");
+  }
 
   return (
     <header className="border-b px-4 md:px-6">
@@ -53,11 +66,13 @@ export default function Component() {
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index} className="w-full">
                       <NavigationMenuLink
-                        href={link.href}
+                        asChild
                         className="py-1.5"
                         active={link.href == currentPage}
                       >
-                        {link.label}
+                        <NavLink to={link.href}>
+                          {link.label}
+                        </NavLink>
                       </NavigationMenuLink>
                     </NavigationMenuItem>
                   ))}
@@ -76,11 +91,13 @@ export default function Component() {
                 {navigationLinks.map((link, index) => (
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink
+                      asChild
                       active={link.href == currentPage}
-                      href={link.href}
                       className="text-muted-foreground hover:text-primary py-1.5 font-medium"
                     >
-                      {link.label}
+                      <NavLink to={link.href}>
+                        {link.label}
+                      </NavLink>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 ))}
@@ -91,9 +108,46 @@ export default function Component() {
         {/* Right side */}
         <div className="flex items-center gap-2">
           <ModeToggle />
-          <Button asChild variant="ghost" size="sm" className="text-sm">
-            <NavLink to="/login">Log In</NavLink>
-          </Button>
+          {
+            (!isLoading && data) ? (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full">
+                    <span className="sr-only">Open user menu</span>
+                    {/* Simple profile icon (can be replaced with user avatar) */}
+                    <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <circle cx="12" cy="8" r="4" />
+                      <path d="M4 20c0-4 8-4 8-4s8 0 8 4" />
+                    </svg>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="end" className="w-40 p-2">
+                  <div className="flex flex-col gap-2">
+                    <Button
+                      asChild
+                      variant="ghost"
+                      size="sm"
+                      className="justify-start"
+                    >
+                      <NavLink to="/admin">Dashboard</NavLink>
+                    </Button>
+                    <Button
+                      onClick={handleLOgOut}
+                      variant="outline"
+                      size="sm"
+                      className="justify-start"
+                    >
+                      Log Out
+                    </Button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            ) : (
+              <Button asChild variant="ghost" size="sm" className="text-sm">
+                <NavLink to="/login">Log In</NavLink>
+              </Button>
+            )
+          }
         </div>
       </div>
     </header>

@@ -1,13 +1,23 @@
 import logo from "@/assets/images/logo.png";
 import logo2 from "@/assets/images/logo_2.png";
 import { LoginForm } from "@/components/modules/authentication/LoginForm";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import loginImage from "@/assets/images/login.jpg";
 import { useTheme } from "@/hooks/useTheme";
+import { useGetDataQuery } from "@/redux/features/auth/auth.api";
+import { useEffect } from "react";
 
 
 export function LoginPage() {
     const { theme } = useTheme();
+    const { data } = useGetDataQuery(undefined);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (data?.data?.email) {
+            navigate("/");
+        }
+    }, [data, navigate]);
 
     return (
         <div className="grid min-h-svh lg:grid-cols-2">
