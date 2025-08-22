@@ -8,7 +8,6 @@ import Password from "@/components/ui/password.originui";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import envConfig from "@/config";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
 
 
@@ -31,9 +30,8 @@ export function LoginForm() {
     const onSubmit = async (data: z.infer<typeof loginSchema>) => {
         const tostId = toast.loading("Logging in...");
         try {
-            const res = await login(data).unwrap();
+            await login(data).unwrap();
             navigate("/");
-            console.log(res);
             toast.success("Login Successfully!", { id: tostId });
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
@@ -91,7 +89,7 @@ export function LoginForm() {
                     </form>
                 </Form>
 
-                <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+                {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                     <span className="bg-background text-muted-foreground relative z-10 px-2">
                         Or continue with
                     </span>
@@ -106,7 +104,7 @@ export function LoginForm() {
                         </g>
                     </svg>
                     Login with Google
-                </Button>
+                </Button> */}
             </div>
             <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}

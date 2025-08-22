@@ -9,7 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Password from "@/components/ui/password.originui";
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { toast } from "sonner";
-import envConfig from "@/config";
 
 
 const createUserSchema = z.object({
@@ -44,8 +43,7 @@ export function SignUpForm() {
         };
 
         try {
-            const result = await register(userInfo).unwrap();
-            console.log(result);
+            await register(userInfo).unwrap();
             toast.success("User created successfully", { id: tostId });
             navigate("/login");
         } catch (error) {
@@ -133,22 +131,6 @@ export function SignUpForm() {
                         <Button type="submit" variant="secondary" className="w-full cursor-pointer">Submit</Button>
                     </form>
                 </Form>
-                <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                    <span className="bg-background text-muted-foreground relative z-10 px-2">
-                        Or continue with
-                    </span>
-                </div>
-                <Button onClick={() => window.open(`${envConfig.BASE_API}/auth/google`)} variant="outline" className="w-full cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width={20} height={20}>
-                        <g>
-                            <path fill="#4285F4" d="M44.5 20H24v8.5h11.7C34.7 33.4 30.1 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.5 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.3-.2-3z" />
-                            <path fill="#34A853" d="M6.3 14.7l7 5.1C15.7 16.1 19.5 13 24 13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.5 6.1 29.6 4 24 4c-7.1 0-13.2 4.1-16.3 10.7z" />
-                            <path fill="#FBBC05" d="M24 44c5.6 0 10.5-1.9 14.1-5.1l-6.5-5.3C29.7 35.9 27 37 24 37c-6.1 0-10.7-4.1-12.4-9.6l-7 5.4C7.8 39.9 15.1 44 24 44z" />
-                            <path fill="#EA4335" d="M44.5 20H24v8.5h11.7c-1.1 3.1-4.3 7.5-11.7 7.5-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.5 6.1 29.6 4 24 4c-7.1 0-13.2 4.1-16.3 10.7l7 5.1C15.7 16.1 19.5 13 24 13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.5 6.1 29.6 4 24 4c-7.1 0-13.2 4.1-16.3 10.7z" />
-                        </g>
-                    </svg>
-                    Login with Google
-                </Button>
             </div>
             <div className="text-center text-sm">
                 I have already an account?{" "}
