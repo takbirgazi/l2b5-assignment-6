@@ -2,7 +2,7 @@ import logo from "@/assets/images/logo.png";
 import logo2 from "@/assets/images/logo_2.png";
 import { LoginForm } from "@/components/modules/authentication/LoginForm";
 import { Link } from "react-router";
-// import loginImage from "@/assets/images/travel-login.jpg";
+import loginImage from "@/assets/images/login.jpg";
 import { useTheme } from "@/hooks/useTheme";
 
 
@@ -24,11 +24,11 @@ export function LoginPage() {
                 </div>
             </div>
             <div className="bg-muted relative hidden lg:block">
-                {/* <img
+                <img
                     src={loginImage}
                     alt="Image"
                     className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-                /> */}
+                />
             </div>
         </div>
     )

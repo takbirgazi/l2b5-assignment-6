@@ -3,7 +3,7 @@ import logo2 from "@/assets/images/logo_2.png";
 import { Link } from "react-router";
 import { useTheme } from "@/hooks/useTheme";
 import { SignUpForm } from "@/components/modules/authentication/SignUpForm";
-
+import signUpImage from "@/assets/images/signup.jpg";
 
 export function SignUpPage() {
     const { theme } = useTheme();
@@ -11,11 +11,11 @@ export function SignUpPage() {
     return (
         <div className="grid min-h-svh lg:grid-cols-2">
             <div className="bg-muted relative hidden lg:block">
-                {/* <img
+                <img
                     src={signUpImage}
                     alt="Image"
                     className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-                /> */}
+                />
             </div>
             <div className="flex flex-col gap-4 p-6 md:p-10">
                 <div className="flex justify-center gap-2 md:justify-start">
@@ -24,7 +24,7 @@ export function SignUpPage() {
                     </Link>
                 </div>
                 <div className="flex flex-1 items-center justify-center">
-                    <div className="w-full max-w-xs">
+                    <div className="w-full max-w-lg border rounded-xl px-4 py-8">
                         <SignUpForm />
                     </div>
                 </div>
