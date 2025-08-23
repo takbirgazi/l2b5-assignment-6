@@ -33,7 +33,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return (
         <Sidebar {...props}>
             <SidebarHeader>
-                <NavLink to="/">
+                <NavLink to={`/${(userData?.data?.role as string)?.toLocaleLowerCase() == "super_admin" ? "admin" : (userData?.data?.role as string)?.toLocaleLowerCase()}`}>
                     <img width={100} height={35} src={theme == "dark" ? logo2 : logo} />
                 </NavLink>
             </SidebarHeader>

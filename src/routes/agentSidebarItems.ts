@@ -1,4 +1,4 @@
-import Analytics from "@/pages/Admin/Analytics";
+import Analytics from "@/pages/Admin/AdminAnalytics";
 import type { ISidebarItems } from "@/types";
 import { DollarSign } from "lucide-react";
 
@@ -6,7 +6,7 @@ import { DollarSign } from "lucide-react";
 
 export const agentSidebarItems: ISidebarItems[] = [
     {
-        title: "History",
+        title: "Dashboard",
         icon: DollarSign,
         items: [
             {

@@ -17,6 +17,10 @@ import { adminSidebarItems } from './adminSidebarItems';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { userSidebarItems } from './userSidebarItems';
 import { agentSidebarItems } from './agentSidebarItems';
+import AdminAnalytics from '@/pages/Admin/AdminAnalytics';
+import AgentAnalytics from '@/pages/Agent/AgentAnalytics';
+import UserAnalytics from '@/pages/User/UserAnalytics';
+
 
 
 export const router = createBrowserRouter([
@@ -54,7 +58,7 @@ export const router = createBrowserRouter([
         path: "/admin",
         Component: withAuth(DashboardLayout, (role.superAdmin as TRole || role.admin as TRole)),
         children: [
-            { index: true, element: <Navigate to="/admin/analytics" /> },
+            { index: true, element: <Navigate to="/admin/analytics" />, Component: AdminAnalytics },
             ...generateRoutes(adminSidebarItems)
         ]
     },
@@ -63,7 +67,7 @@ export const router = createBrowserRouter([
         path: "/agent",
         Component: withAuth(DashboardLayout, (role.agent as TRole)),
         children: [
-            { index: true, element: <Navigate to="/agent/analytics" /> },
+            { index: true, element: <Navigate to="/agent/analytics" />, Component: AgentAnalytics },
             ...generateRoutes(agentSidebarItems)
         ]
     },
@@ -72,7 +76,7 @@ export const router = createBrowserRouter([
         path: "/user",
         Component: withAuth(DashboardLayout, (role.user as TRole)),
         children: [
-            { index: true, element: <Navigate to="/user/analytics" /> },
+            { index: true, element: <Navigate to="/user/analytics" />, Component: UserAnalytics },
             ...generateRoutes(userSidebarItems)
         ]
     },
