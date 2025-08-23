@@ -1,4 +1,5 @@
 import App from '@/App';
+import { role } from '@/assets/constants/role';
 import AboutPage from '@/pages/AboutPage';
 import ContactPage from '@/pages/ContactPage';
 import ErrorPage from '@/pages/ErrorPage';
@@ -8,7 +9,14 @@ import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
 import SignUpPage from '@/pages/SignUpPage';
 import UnauthorizePage from '@/pages/UnauthorizePage';
-import { createBrowserRouter } from 'react-router';
+import type { TRole } from '@/types';
+import { generateRoutes } from '@/utils/generateRoutes';
+import { withAuth } from '@/utils/withAuth';
+import { createBrowserRouter, Navigate } from 'react-router';
+import { adminSidebarItems } from './adminSidebarItems';
+import DashboardLayout from '@/components/layout/DashboardLayout';
+import { userSidebarItems } from './userSidebarItems';
+import { agentSidebarItems } from './agentSidebarItems';
 
 
 export const router = createBrowserRouter([
@@ -42,14 +50,32 @@ export const router = createBrowserRouter([
     },
 
     // For Admin Routes 
-    // {
-    //     path: "/admin",
-    //     Component: withAuth(DashboardLayout, (role.superAdmin as TRole || role.admin as TRole)),
-    //     children: [
-    //         { index: true, element: <Navigate to="/admin/analytics" /> },
-    //         ...generateRoutes(adminSidebarItems)
-    //     ]
-    // },
+    {
+        path: "/admin",
+        Component: withAuth(DashboardLayout, (role.superAdmin as TRole || role.admin as TRole)),
+        children: [
+            { index: true, element: <Navigate to="/admin/analytics" /> },
+            ...generateRoutes(adminSidebarItems)
+        ]
+    },
+    // For User Routes 
+    {
+        path: "/agent",
+        Component: withAuth(DashboardLayout, (role.agent as TRole)),
+        children: [
+            { index: true, element: <Navigate to="/agent/analytics" /> },
+            ...generateRoutes(agentSidebarItems)
+        ]
+    },
+    // For User Routes 
+    {
+        path: "/user",
+        Component: withAuth(DashboardLayout, (role.user as TRole)),
+        children: [
+            { index: true, element: <Navigate to="/user/analytics" /> },
+            ...generateRoutes(userSidebarItems)
+        ]
+    },
 
     // Out Of App
     {

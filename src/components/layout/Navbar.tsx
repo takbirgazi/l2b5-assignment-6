@@ -129,7 +129,7 @@ export default function Component() {
                       size="sm"
                       className="justify-start"
                     >
-                      <NavLink to="/admin">Dashboard</NavLink>
+                      <NavLink to={(data?.data?.role as string).toLocaleLowerCase() == "super_admin" ? "admin" : (data?.data?.role as string).toLocaleLowerCase()}>Dashboard</NavLink>
                     </Button>
                     <Button
                       onClick={handleLOgOut}
