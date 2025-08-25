@@ -11,7 +11,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { Loader2 } from "lucide-react";
+import { Loader, Loader2 } from "lucide-react";
 import { useGetAllDataQuery } from "@/redux/features/user/user.api";
 
 export default function ManageUser() {
@@ -35,55 +35,56 @@ export default function ManageUser() {
                     </Button>
                 </CardContent>
             </Card>
-
-            <Card>
-                <CardContent className="p-4">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Name</TableHead>
-                                <TableHead>Email</TableHead>
-                                <TableHead>Balance</TableHead>
-                                <TableHead>Role</TableHead>
-                                <TableHead>Status</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {users?.data?.length === 0 && !isLoading && (
+            {
+                isLoading ? <div className="w-full flex justify-center items-center"><Loader /></div> : <Card>
+                    <CardContent className="p-4">
+                        <Table>
+                            <TableHeader>
                                 <TableRow>
-                                    <TableCell colSpan={7} className="text-center py-6">
-                                        No users found
-                                    </TableCell>
+                                    <TableHead>Name</TableHead>
+                                    <TableHead>Email</TableHead>
+                                    <TableHead>Balance</TableHead>
+                                    <TableHead>Role</TableHead>
+                                    <TableHead>Status</TableHead>
                                 </TableRow>
-                            )}
-                            {users?.data?.map((user: any) => (
-                                <TableRow key={user._id}>
-                                    <TableCell>{user.name}</TableCell>
-                                    <TableCell>{user.email}</TableCell>
-                                    <TableCell>{user?.wallet?.balance} ৳</TableCell>
-                                    <TableCell>
-                                        <Button
-                                            size="sm"
-                                            variant={user.role === "admin" ? "default" : "outline"}
-                                        >
-                                            {user.role}
-                                        </Button>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button
-                                            size="sm"
-                                            variant={user.isActive ? "default" : "destructive"}
-                                            className="text-white"
-                                        >
-                                            {user.isActive}
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
+                            </TableHeader>
+                            <TableBody>
+                                {users?.data?.length === 0 && !isLoading && (
+                                    <TableRow>
+                                        <TableCell colSpan={7} className="text-center py-6">
+                                            No users found
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                                {users?.data?.map((user: any) => (
+                                    <TableRow key={user._id}>
+                                        <TableCell>{user.name}</TableCell>
+                                        <TableCell>{user.email}</TableCell>
+                                        <TableCell>{user?.wallet?.balance} ৳</TableCell>
+                                        <TableCell>
+                                            <Button
+                                                size="sm"
+                                                variant={user.role === "admin" ? "default" : "outline"}
+                                            >
+                                                {user.role}
+                                            </Button>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Button
+                                                size="sm"
+                                                variant={user.isActive ? "default" : "destructive"}
+                                                className="text-white"
+                                            >
+                                                {user.isActive}
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
+            }
         </div>
     );
 };
