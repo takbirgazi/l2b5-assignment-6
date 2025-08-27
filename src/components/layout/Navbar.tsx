@@ -107,7 +107,9 @@ export default function Component() {
         </div>
         {/* Right side */}
         <div className="flex items-center gap-2">
-          <ModeToggle />
+          <div className="mode-toggle">
+            <ModeToggle />
+          </div>
           {
             (!isLoading && data) ? (
               <Popover>

@@ -3,17 +3,67 @@ import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { Wallet, Send, CreditCard, Shield, Users, Smartphone } from "lucide-react";
 import { NavLink } from "react-router";
+import Joyride from 'react-joyride';
+import { useEffect, useState } from "react";
+
+const steps = [
+    {
+        target: '.hero-title',
+        content: 'Welcome to No-Cash! Start your journey here.',
+    },
+    {
+        target: '.mode-toggle',
+        content: 'Toggle between light and dark mode for your preference.',
+    },
+    {
+        target: '.get-started-btn',
+        content: 'Click here to get started with No-Cash.',
+    },
+    {
+        target: '.features-section',
+        content: 'Check out our top features for your convenience.',
+    },
+    {
+        target: '.how-it-works-section',
+        content: 'See how easy it is to use No-Cash.',
+    },
+    {
+        target: '.testimonials-section',
+        content: 'Read what our users say about us!',
+    },
+];
 
 export default function HomePage() {
+    const [run, setRun] = useState(false);
+
+    useEffect(() => {
+        const hasSeenTour = localStorage.getItem("hasSeenTour");
+        if (!hasSeenTour) {
+            setRun(true);
+            localStorage.setItem("hasSeenTour", "true");
+        }
+    }, []);
+
     return (
         <div className="w-full">
+            <Joyride
+                steps={steps}
+                run={run}
+                continuous
+                showSkipButton
+                styles={{
+                    options: {
+                        zIndex: 10000,
+                    },
+                }}
+            />
             {/* Hero Section */}
             <section className="relative flex flex-col items-center justify-center text-center px-6 py-20 bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
                 <motion.h1
                     initial={{ opacity: 0, y: -30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
-                    className="text-5xl font-bold mb-4"
+                    className="text-5xl font-bold mb-4 hero-title"
                 >
                     Welcome to No-Cash
                 </motion.h1>
@@ -21,12 +71,12 @@ export default function HomePage() {
                     A secure, fast, and reliable digital wallet service like bKash – send, receive, cash in, and cash out anytime, anywhere.
                 </p>
                 <NavLink to="/login">
-                    <Button className="cursor-pointer" size="lg" variant="secondary">Get Started</Button>
+                    <Button className="cursor-pointer get-started-btn" size="lg" variant="secondary">Get Started</Button>
                 </NavLink>
             </section>
 
             {/* Features */}
-            <section className="py-16 px-6 max-w-6xl mx-auto">
+            <section className="py-16 px-6 max-w-6xl mx-auto features-section">
                 <h2 className="text-3xl font-bold text-center mb-12">Why Choose No-Cash?</h2>
                 <div className="grid gap-6 md:grid-cols-3">
                     <Card className="shadow-lg hover:shadow-2xl transition">
@@ -54,7 +104,7 @@ export default function HomePage() {
             </section>
 
             {/* How it works */}
-            <section className="py-16 bg-gray-50 dark:bg-gray-900 px-6">
+            <section className="py-16 bg-gray-50 dark:bg-gray-900 px-6 how-it-works-section">
                 <h2 className="text-3xl font-bold text-center mb-12">How No-Cash Works</h2>
                 <div className="grid gap-8 md:grid-cols-3 max-w-6xl mx-auto">
                     <div className="text-center">
@@ -76,7 +126,7 @@ export default function HomePage() {
             </section>
 
             {/* Testimonials */}
-            <section className="py-16 px-6 max-w-6xl mx-auto">
+            <section className="py-16 px-6 max-w-6xl mx-auto testimonials-section">
                 <h2 className="text-3xl font-bold text-center mb-12">What Our Users Say</h2>
                 <div className="grid md:grid-cols-2 gap-8">
                     <Card className="p-6 shadow-md hover:shadow-xl transition">
