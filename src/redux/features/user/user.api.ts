@@ -4,7 +4,7 @@ export const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getAllData: builder.query({
             query: (userInfo) => ({
-                url: "/user/all-users",
+                url: `/user/all-users?search=${userInfo.search}&page=${userInfo.page}&limit=${15}`,
                 method: "GET",
                 data: userInfo
             }),
@@ -15,7 +15,7 @@ export const userApi = baseApi.injectEndpoints({
             query: (userInfo) => ({
                 url: `/user/${userInfo.id}`,
                 method: "PATCH",
-                data: userInfo.data, 
+                data: userInfo.data,
             }),
             invalidatesTags: ["USER"]
         })
