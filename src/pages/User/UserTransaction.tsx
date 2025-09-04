@@ -1,135 +1,142 @@
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink } from "@/components/ui/pagination";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useGetMyTransactionQuery } from "@/redux/features/transaction/transaction.api";
 
-type Transaction = {
-  id: string;
-  type: "Cash In" | "Cash Out" | "Send Money" | "Receive";
-  amount: number;
-  date: string;
-};
-
-const mockTransactions: Transaction[] = [
-  { id: "1", type: "Cash In", amount: 500, date: "2025-08-01" },
-  { id: "2", type: "Cash Out", amount: 200, date: "2025-08-03" },
-  { id: "3", type: "Send Money", amount: 1000, date: "2025-08-05" },
-  { id: "4", type: "Receive", amount: 750, date: "2025-08-07" },
-  { id: "5", type: "Cash In", amount: 1200, date: "2025-08-09" },
-  { id: "6", type: "Send Money", amount: 300, date: "2025-08-11" },
-  { id: "7", type: "Cash Out", amount: 400, date: "2025-08-13" },
-];
+// Pagination Component
+function Pagination({
+  page,
+  totalPage,
+  onPageChange,
+}: {
+  page: number
+  totalPage: number
+  onPageChange: (page: number) => void
+}) {
+  return (
+    <div className="flex justify-center items-center gap-2 py-4">
+      <button
+        className="px-3 py-1 border rounded disabled:opacity-50"
+        disabled={page <= 1}
+        onClick={() => onPageChange(page - 1)}
+      >
+        Prev
+      </button>
+      <span>
+        Page {page} of {totalPage}
+      </span>
+      <button
+        className="px-3 py-1 border rounded disabled:opacity-50"
+        disabled={page >= totalPage}
+        onClick={() => onPageChange(page + 1)}
+      >
+        Next
+      </button>
+    </div>
+  )
+}
 
 export default function UserTransaction() {
-  const [typeFilter, setTypeFilter] = useState<string>("all");
-  const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
-  const [page, setPage] = useState(1);
-  const pageSize = 5;
+  const [filters, setFilters] = useState({
+    search: "",
+    type: "all",
+    fromDate: "",
+    toDate: "",
+  })
+  const [page, setPage] = useState(1)
+  const limit = 10
 
-  const filteredTransactions = mockTransactions.filter((tx) => {
-    const matchType = typeFilter === "all" || tx.type === typeFilter;
-    const matchStart = !startDate || new Date(tx.date) >= new Date(startDate);
-    const matchEnd = !endDate || new Date(tx.date) <= new Date(endDate);
-    return matchType && matchStart && matchEnd;
-  });
-
-  const paginated = filteredTransactions.slice((page - 1) * pageSize, page * pageSize);
-  const totalPages = Math.ceil(filteredTransactions.length / pageSize);
+  // Pass pagination and filters to API if supported
+  const { data: transaction } = useGetMyTransactionQuery({
+    page,
+    limit,
+    search: filters.search,
+    type: filters.type !== "all" ? filters.type : undefined,
+    fromDate: filters.fromDate || undefined,
+    toDate: filters.toDate || undefined,
+  })
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold text-center mb-6">Transaction History</h1>
+    <div className="p-6 space-y-6">
+      <h1 className="text-2xl font-bold">All Transactions History</h1>
 
       {/* Filters */}
-      <Card className="mb-6">
-        <CardContent className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
-          <div>
-            <label className="text-sm font-medium">Transaction Type</label>
-            <Select onValueChange={setTypeFilter} defaultValue="all">
-              <SelectTrigger>
-                <SelectValue placeholder="All" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="Cash In">Cash In</SelectItem>
-                <SelectItem value="Cash Out">Cash Out</SelectItem>
-                <SelectItem value="Send Money">Send Money</SelectItem>
-                <SelectItem value="Receive">Receive</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <label className="text-sm font-medium">Start Date</label>
-            <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-          </div>
-
-          <div>
-            <label className="text-sm font-medium">End Date</label>
-            <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-          </div>
-
-          <div className="flex items-end">
-            <Button onClick={() => { setTypeFilter("all"); setStartDate(""); setEndDate(""); }}>Reset</Button>
-          </div>
+      <Card>
+        <CardContent className="p-4 grid grid-cols-1 md:grid-cols-5 gap-4">
+          <Input
+            placeholder="Search by User or Txn ID"
+            value={filters.search}
+            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+          />
+          <Select onValueChange={(v) => setFilters({ ...filters, type: v })} defaultValue="all">
+            <SelectTrigger><SelectValue placeholder="Transaction Type" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
+              <SelectItem value="CASH_IN">Cash In</SelectItem>
+              <SelectItem value="CASH_OUT">Cash Out</SelectItem>
+              <SelectItem value="SEND_MONEY">Send Money</SelectItem>
+              <SelectItem value="RECEIVE_MONEY">Receive Money</SelectItem>
+            </SelectContent>
+          </Select>
+          <Input
+            type="date"
+            onChange={(e) => setFilters({ ...filters, fromDate: e.target.value })}
+          />
+          <Input
+            type="date"
+            onChange={(e) => setFilters({ ...filters, toDate: e.target.value })}
+          />
         </CardContent>
       </Card>
 
       {/* Transactions Table */}
       <Card>
-        <CardContent className="overflow-x-auto p-0">
+        <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>ID</TableHead>
+                <TableHead>Transaction ID</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Email</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {paginated.length > 0 ? (
-                paginated.map((tx) => (
-                  <TableRow key={tx.id}>
-                    <TableCell>{tx.id}</TableCell>
-                    <TableCell>{tx.type}</TableCell>
-                    <TableCell>{tx.amount} ৳</TableCell>
-                    <TableCell>{tx.date}</TableCell>
+              {transaction?.data?.length > 0 ? (
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                transaction.data.map((txn: any) => (
+                  <TableRow key={txn?.transactionId}>
+                    <TableCell>{txn?.transactionId}</TableCell>
+                    <TableCell>{txn?.transactionWith?.name}</TableCell>
+                    <TableCell>{txn?.transactionWith?.email}</TableCell>
+                    <TableCell>{txn?.type}</TableCell>
+                    <TableCell>${txn?.amount}</TableCell>
+                    <TableCell>{txn?.createdAt ? new Date(txn.createdAt).toLocaleDateString() : ""}</TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-6">
+                  <TableCell colSpan={6} className="text-center py-4">
                     No transactions found
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
+          {/* Pagination */}
+          {transaction?.meta && transaction.meta.totalPage > 1 && (
+            <Pagination
+              page={transaction.meta.page}
+              totalPage={transaction.meta.totalPage}
+              onPageChange={setPage}
+            />
+          )}
         </CardContent>
       </Card>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <Pagination className="mt-6 justify-center">
-          <PaginationContent>
-            {Array.from({ length: totalPages }, (_, i) => (
-              <PaginationItem key={i}>
-                <PaginationLink
-                  isActive={page === i + 1}
-                  onClick={() => setPage(i + 1)}
-                >
-                  {i + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-          </PaginationContent>
-        </Pagination>
-      )}
     </div>
-  );
+  )
 }

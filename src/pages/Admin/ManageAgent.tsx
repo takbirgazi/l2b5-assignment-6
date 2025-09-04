@@ -12,12 +12,23 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Loader, Loader2 } from "lucide-react";
-import { useGetAllDataQuery } from "@/redux/features/user/user.api";
+import { useGetAllDataQuery, useUpdateUserMutation } from "@/redux/features/user/user.api";
+import { status } from "@/assets/constants/role";
 
 export default function ManageAgent() {
     const { data: users = [], isLoading, refetch } = useGetAllDataQuery(undefined);
     const [search, setSearch] = useState("");
+    const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+    const [newStatus, setNewStatus] = useState<string>("");
+    const [updateStatus, { isLoading: isUpdating }] = useUpdateUserMutation();
 
+    const handleUpdate = (id: string, info: string) => {
+        updateStatus({
+            id, data: {
+                isActive: info
+            }
+        });
+    }
 
     return (
         <div className="p-6">
@@ -30,7 +41,7 @@ export default function ManageAgent() {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
-                    <Button onClick={() => refetch()} disabled={isLoading}>
+                    <Button className="text-white" onClick={() => refetch()} disabled={isLoading}>
                         {isLoading ? <Loader2 className="animate-spin h-4 w-4" /> : "Refresh"}
                     </Button>
                 </CardContent>
@@ -44,7 +55,6 @@ export default function ManageAgent() {
                                     <TableHead>Name</TableHead>
                                     <TableHead>Email</TableHead>
                                     <TableHead>Balance</TableHead>
-                                    <TableHead>Role</TableHead>
                                     <TableHead>Status</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -56,30 +66,45 @@ export default function ManageAgent() {
                                         </TableCell>
                                     </TableRow>
                                 )}
-                                {users?.data?.map((user: any) => (
-                                    <TableRow key={user._id}>
-                                        <TableCell>{user.name}</TableCell>
-                                        <TableCell>{user.email}</TableCell>
-                                        <TableCell>{user?.wallet?.balance} ৳</TableCell>
-                                        <TableCell>
-                                            <Button
-                                                size="sm"
-                                                variant={user.role === "admin" ? "default" : "outline"}
-                                            >
-                                                {user.role}
-                                            </Button>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Button
-                                                size="sm"
-                                                variant={user.isActive ? "default" : "destructive"}
-                                                className="text-white"
-                                            >
-                                                {user.isActive}
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                {users?.data
+                                    ?.filter((user: any) => user.role === "AGENT")
+                                    .map((user: any) => (
+                                        <TableRow key={user._id}>
+                                            <TableCell>{user.name}</TableCell>
+                                            <TableCell>{user.email}</TableCell>
+                                            <TableCell>{user?.wallet?.balance} ৳</TableCell>
+                                            <TableCell>
+                                                <div className="flex items-center">
+                                                    <select
+                                                        value={selectedUserId === user._id ? newStatus || user.isActive : user.isActive}
+                                                        onChange={(e) => {
+                                                            setSelectedUserId(user._id);
+                                                            setNewStatus(e.target.value);
+                                                        }}
+                                                        className={`px-2 py-1 rounded border text-black ${user.isActive === "ACTIVE"
+                                                            ? "bg-green-100"
+                                                            : user.isActive === "INACTIVE"
+                                                                ? "bg-yellow-100"
+                                                                : "bg-red-100"
+                                                            }`}
+                                                    >
+                                                        <option value={status.active}>Approved</option>
+                                                        <option value={status.blocked}>Suspended</option>
+                                                    </select>
+                                                    {selectedUserId === user._id && newStatus !== user.isActive && (
+                                                        <Button
+                                                            size="sm"
+                                                            className="ml-2 text-white cursor-pointer"
+                                                            disabled={isUpdating}
+                                                            onClick={() => handleUpdate(user._id, newStatus)}
+                                                        >
+                                                            {isUpdating ? <Loader2 className="animate-spin h-4 w-4" /> : "Save"}
+                                                        </Button>
+                                                    )}
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
                             </TableBody>
                         </Table>
                     </CardContent>
