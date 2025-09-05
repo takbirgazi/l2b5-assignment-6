@@ -8,7 +8,7 @@ import { useGetMyTransactionQuery } from "@/redux/features/transaction/transacti
 const COLORS = ["#4f46e5", "#22c55e", "#f59e0b"];
 
 export default function AgentAnalytics() {
-    const { data: balance } = useGetDataQuery(undefined);
+    const { data: balance, isLoading } = useGetDataQuery(undefined);
     const { data: transferMoney } = useGetTransferMoneyQuery(undefined);
     const { data: transactionSummery } = useGetTransactionSummeryQuery(undefined);
     const { data: transactionCount } = useGetMyTransactionQuery({ search: "" });
@@ -32,7 +32,7 @@ export default function AgentAnalytics() {
                         <CardTitle>My Balance</CardTitle>
                         <Users className="text-indigo-600" />
                     </CardHeader>
-                    <CardContent className="text-2xl font-bold"><span className="text-4xl">{Number(balance?.data?.wallet?.balance).toFixed(2)}</span> ৳</CardContent>
+                    <CardContent className="text-2xl font-bold"><span className="text-4xl">{!isLoading && Number(balance?.data?.wallet?.balance).toFixed(2)}</span> ৳</CardContent>
                 </Card>
 
                 <Card className="shadow-md rounded-2xl">
