@@ -8,6 +8,7 @@ export const walletApi = baseApi.injectEndpoints({
                 method: "PATCH",
                 data: userInfo.data,
             }),
+            invalidatesTags: ["TRANSACTION"]
         }),
         senMoney: builder.mutation({
             query: (userInfo) => ({
@@ -15,6 +16,7 @@ export const walletApi = baseApi.injectEndpoints({
                 method: "PATCH",
                 data: userInfo.data,
             }),
+            invalidatesTags: ["TRANSACTION"]
         }),
         cashIn: builder.mutation({
             query: (userInfo) => ({
@@ -22,6 +24,7 @@ export const walletApi = baseApi.injectEndpoints({
                 method: "PATCH",
                 data: userInfo.data,
             }),
+            invalidatesTags: ["TRANSACTION"]
         }),
 
 
