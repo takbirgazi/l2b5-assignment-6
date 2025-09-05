@@ -30,7 +30,7 @@ export const authApi = baseApi.injectEndpoints({
                 method: "GET",
                 data: userInfo
             }),
-            providesTags: ["USER"]
+            providesTags: ["USER", "TRANSACTION"]
         }),
 
     })
