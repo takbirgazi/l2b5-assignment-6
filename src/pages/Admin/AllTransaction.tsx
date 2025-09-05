@@ -55,7 +55,7 @@ export default function AllTransaction() {
       <Card className="mb-4">
         <CardContent className="flex gap-2 p-4">
           <Input
-            placeholder="Search by user or transaction ID"
+            placeholder="Search transaction ID"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
